@@ -3,37 +3,13 @@
 """
 Network Protocol Trainer
 An advanced Tkinter educational game to learn network protocols and acronyms.
-Supports learning mode, multiple quiz modes, scoring, streaks, search, and
-customizable text colors.
+Supports learning mode, multiple quiz modes, scoring, streaks, and search.
 """
 
 import tkinter as tk
-from tkinter import ttk, messagebox, simpledialog, colorchooser
+from tkinter import ttk, messagebox, simpledialog
 import random
 from collections import defaultdict
-
-# ---------------------------------------------------------------------------
-# Theme / Color configuration
-# ---------------------------------------------------------------------------
-
-DEFAULT_COLORS = {
-    "title": "#1a1a2e",
-    "subtitle": "#16213e",
-    "header": "#0f3460",
-    "normal_text": "#000000",
-    "feedback_correct": "#008000",
-    "feedback_wrong": "#cc0000",
-    "hint": "#0000cc",
-    "link": "#0066cc",
-}
-
-# Global dictionary updated by the user through the Settings frame.
-USER_COLORS = dict(DEFAULT_COLORS)
-
-
-def get_color(key):
-    """Return the current color for a given semantic key."""
-    return USER_COLORS.get(key, DEFAULT_COLORS[key])
 
 # -----------------------------------------------------------------------------
 # Protocol Database
@@ -855,21 +831,19 @@ class MainMenuFrame(BaseFrame):
         super().__init__(parent, controller)
         self.columnconfigure(0, weight=1)
 
-        self.title_label = ttk.Label(
+        title = ttk.Label(
             self,
             text="🌐 Network Protocol Trainer",
             font=("Helvetica", 28, "bold"),
             anchor="center",
-            foreground=get_color("title"),
         )
-        self.title_label.grid(row=0, column=0, pady=(40, 20), sticky="ew")
+        title.grid(row=0, column=0, pady=(40, 20), sticky="ew")
 
-        self.subtitle_label = ttk.Label(
+        subtitle = ttk.Label(
             self,
             text="Maîtrisez les acronymes et protocoles réseau",
             font=("Helvetica", 14),
             anchor="center",
-            foreground=get_color("subtitle"),
         )
         subtitle.grid(row=1, column=0, pady=(0, 30), sticky="ew")
 
@@ -880,7 +854,6 @@ class MainMenuFrame(BaseFrame):
             ("🧩 Quiz association", lambda: controller.show_frame("QuizMatchFrame")),
             ("🔍 Rechercher un protocole", lambda: controller.show_frame("SearchFrame")),
             ("🏆 Statistiques", lambda: controller.show_frame("StatsFrame")),
-            ("🎨 Couleurs du texte", lambda: controller.show_frame("SettingsFrame")),
             ("ℹ️ À propos", self.show_about),
         ]
 
@@ -907,13 +880,8 @@ class LearnFrame(BaseFrame):
         self.columnconfigure(0, weight=1)
         self.rowconfigure(2, weight=1)
 
-        self.header = ttk.Label(
-            self,
-            text="Mode Apprentissage",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
+        header = ttk.Label(self, text="Mode Apprentissage", font=("Helvetica", 20, "bold"))
+        header.grid(row=0, column=0, pady=(20, 10))
 
         filter_frame = ttk.Frame(self)
         filter_frame.grid(row=1, column=0, pady=10)
@@ -1023,13 +991,8 @@ class QuizMCQFrame(BaseFrame):
         self.answer = None
         self.streak = 0
 
-        self.header = ttk.Label(
-            self,
-            text="Quiz à choix multiples",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
+        header = ttk.Label(self, text="Quiz à choix multiples", font=("Helvetica", 20, "bold"))
+        header.grid(row=0, column=0, pady=(20, 10))
 
         self.score_label = ttk.Label(self, text="Score : 0", font=("Helvetica", 12))
         self.score_label.grid(row=1, column=0, pady=5)
@@ -1134,13 +1097,8 @@ class QuizTypeFrame(BaseFrame):
         self.current_acronym = None
         self.streak = 0
 
-        self.header = ttk.Label(
-            self,
-            text="Quiz réponse libre",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
+        header = ttk.Label(self, text="Quiz réponse libre", font=("Helvetica", 20, "bold"))
+        header.grid(row=0, column=0, pady=(20, 10))
 
         self.score_label = ttk.Label(self, text="Score : 0", font=("Helvetica", 12))
         self.score_label.grid(row=1, column=0, pady=5)
@@ -1239,13 +1197,8 @@ class QuizMatchFrame(BaseFrame):
         self.matched = set()
         self.streak = 0
 
-        self.header = ttk.Label(
-            self,
-            text="Quiz association",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
+        header = ttk.Label(self, text="Quiz association", font=("Helvetica", 20, "bold"))
+        header.grid(row=0, column=0, pady=(20, 10))
 
         self.score_label = ttk.Label(self, text="Score : 0", font=("Helvetica", 12))
         self.score_label.grid(row=1, column=0, pady=5)
@@ -1397,13 +1350,8 @@ class SearchFrame(BaseFrame):
         super().__init__(parent, controller)
         self.columnconfigure(0, weight=1)
 
-        self.header = ttk.Label(
-            self,
-            text="Recherche de protocole",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
+        header = ttk.Label(self, text="Recherche de protocole", font=("Helvetica", 20, "bold"))
+        header.grid(row=0, column=0, pady=(20, 10))
 
         search_frame = ttk.Frame(self)
         search_frame.grid(row=1, column=0, pady=10)
@@ -1473,107 +1421,6 @@ class SearchFrame(BaseFrame):
 
 
 # -----------------------------------------------------------------------------
-# Settings Frame (customize text colors)
-# -----------------------------------------------------------------------------
-
-class SettingsFrame(BaseFrame):
-    """Frame allowing the user to customize the colors used for text labels."""
-
-    COLOR_KEYS = [
-        ("title", "Titre principal"),
-        ("subtitle", "Sous-titre"),
-        ("header", "Titres de section"),
-        ("normal_text", "Texte normal"),
-        ("feedback_correct", "Feedback correct"),
-        ("feedback_wrong", "Feedback faux"),
-        ("hint", "Indice"),
-        ("link", "Lien / surligné"),
-    ]
-
-    def __init__(self, parent, controller):
-        super().__init__(parent, controller)
-        self.columnconfigure(0, weight=1)
-        self.rowconfigure(1, weight=1)
-
-        self.header = ttk.Label(
-            self,
-            text="🎨 Couleurs du texte",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
-
-        canvas = tk.Canvas(self, highlightthickness=0)
-        scrollbar = ttk.Scrollbar(self, orient="vertical", command=canvas.yview)
-        self.content = ttk.Frame(canvas)
-        self.content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
-
-        canvas.create_window((0, 0), window=self.content, anchor="nw")
-        canvas.configure(yscrollcommand=scrollbar.set)
-
-        canvas.grid(row=1, column=0, sticky="nsew", padx=20, pady=10)
-        scrollbar.grid(row=1, column=1, sticky="ns")
-
-        self.preview_labels = {}
-        self.color_vars = {}
-        for idx, (key, label) in enumerate(self.COLOR_KEYS):
-            row = ttk.Frame(self.content)
-            row.pack(fill="x", pady=5)
-
-            ttk.Label(row, text=label, width=25, anchor="w").pack(side="left")
-            var = tk.StringVar(value=get_color(key))
-            self.color_vars[key] = var
-            entry = ttk.Entry(row, textvariable=var, width=12)
-            entry.pack(side="left", padx=5)
-            preview = tk.Label(row, text="Aa", bg=var.get(), fg="white", width=4)
-            preview.pack(side="left", padx=5)
-            self.preview_labels[key] = preview
-
-            ttk.Button(
-                row,
-                text="Choisir...",
-                command=lambda k=key, v=var: self.pick_color(k, v),
-            ).pack(side="left", padx=5)
-
-            var.trace_add("write", lambda *args, k=key, v=var: self.update_preview(k, v))
-
-        btn_frame = ttk.Frame(self)
-        btn_frame.grid(row=2, column=0, pady=15)
-        ttk.Button(btn_frame, text="Appliquer", command=self.apply_colors).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Réinitialiser", command=self.reset_colors).pack(side="left", padx=5)
-        ttk.Button(btn_frame, text="Retour au menu", command=lambda: controller.show_frame("MainMenuFrame")).pack(
-            side="left", padx=5
-        )
-
-        self.info_label = ttk.Label(self, text="", font=("Helvetica", 10))
-        self.info_label.grid(row=3, column=0, pady=5)
-
-    def pick_color(self, key, var):
-        color = colorchooser.askcolor(initialcolor=var.get(), title=f"Choisir la couleur : {key}")[1]
-        if color:
-            var.set(color)
-
-    def update_preview(self, key, var):
-        try:
-            self.preview_labels[key].config(bg=var.get())
-        except tk.TclError:
-            pass
-
-    def apply_colors(self):
-        for key, var in self.color_vars.items():
-            USER_COLORS[key] = var.get()
-        self.controller.refresh_colors()
-        self.info_label.config(text="✅ Couleurs appliquées !", foreground=get_color("feedback_correct"))
-
-    def reset_colors(self):
-        USER_COLORS.update(DEFAULT_COLORS)
-        for key, var in self.color_vars.items():
-            var.set(DEFAULT_COLORS[key])
-        self.controller.refresh_colors()
-        self.info_label.config(text="↺ Couleurs par défaut restaurées.", foreground=get_color("hint"))
-
-
-# -----------------------------------------------------------------------------
 # Stats Frame
 # -----------------------------------------------------------------------------
 
@@ -1582,13 +1429,8 @@ class StatsFrame(BaseFrame):
         super().__init__(parent, controller)
         self.columnconfigure(0, weight=1)
 
-        self.header = ttk.Label(
-            self,
-            text="Statistiques",
-            font=("Helvetica", 20, "bold"),
-            foreground=get_color("header"),
-        )
-        self.header.grid(row=0, column=0, pady=(20, 10))
+        header = ttk.Label(self, text="Statistiques", font=("Helvetica", 20, "bold"))
+        header.grid(row=0, column=0, pady=(20, 10))
 
         self.stats_text = tk.Text(
             self,
@@ -1661,7 +1503,6 @@ class NetworkTrainerApp(tk.Tk):
             QuizTypeFrame,
             QuizMatchFrame,
             SearchFrame,
-            SettingsFrame,
             StatsFrame,
         ):
             page_name = F.__name__
@@ -1675,36 +1516,6 @@ class NetworkTrainerApp(tk.Tk):
         frame = self.frames[page_name]
         frame.reset()
         frame.tkraise()
-
-    def refresh_colors(self):
-        """Propagate the current USER_COLORS to all known color-aware widgets."""
-        # Main menu
-        main = self.frames.get("MainMenuFrame")
-        if main:
-            main.title_label.config(foreground=get_color("title"))
-            main.subtitle_label.config(foreground=get_color("subtitle"))
-
-        # Quiz frames use semantic colors in reset / update cycles.
-        for name in ("QuizMCQFrame", "QuizTypeFrame", "QuizMatchFrame"):
-            quiz = self.frames.get(name)
-            if quiz:
-                quiz.feedback_label.config(foreground=get_color("feedback_correct"))
-                quiz.hint_label.config(foreground=get_color("hint"))
-                if hasattr(quiz, "question_label"):
-                    quiz.question_label.config(foreground=get_color("normal_text"))
-                if hasattr(quiz, "instruction"):
-                    quiz.instruction.config(foreground=get_color("normal_text"))
-
-        # Learn / Search / Stats headers
-        for name in ("LearnFrame", "SearchFrame", "StatsFrame"):
-            frame = self.frames.get(name)
-            if frame and hasattr(frame, "header"):
-                frame.header.config(foreground=get_color("header"))
-
-        # Settings info label
-        settings = self.frames.get("SettingsFrame")
-        if settings and hasattr(settings, "info_label"):
-            settings.info_label.config(foreground=get_color("normal_text"))
 
 
 # -----------------------------------------------------------------------------
