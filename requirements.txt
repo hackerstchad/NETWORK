@@ -1,0 +1,5 @@
+# Network Protocol Trainer - Dépendances
+# tkinter est généralement fourni avec l'installation Python standard.
+
+# Aucune dépendance externe obligatoire.
+# Ce fichier est fourni pour une installation standard compatible pip.
